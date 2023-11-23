@@ -1,6 +1,6 @@
 <template>
     <AuthenticatedLayout>
-        <table class="min-w-full">
+        <table v-if="files.data.length" class="min-w-full">
             <thead class="bg-gray-100 border-b">
             <tr>
                 <th class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
@@ -19,7 +19,8 @@
             </thead>
             <tbody>
             <tr
-                class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100"
+                @dblclick="openFolder(file)"
+                class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
                 v-for="file of files.data" :key="file.id"
             >
                 <td
@@ -30,7 +31,7 @@
                 <td
                     class="px-6 py-4 whitespace-nowrap text-sm font-medium"
                 >
-                    {{file.name}}
+                    {{file.owner}}
                 </td>
                 <td
                     class="px-6 py-4 whitespace-nowrap text-sm font-medium"
@@ -45,6 +46,9 @@
             </tr>
             </tbody>
         </table>
+        <div v-else class="py-8 text-center text-lg text-gray-400">
+            There is no data in this folder
+        </div>
     </AuthenticatedLayout>
 </template>
 
@@ -52,6 +56,7 @@
 
 // Imports
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import {router} from "@inertiajs/vue3";
 
 // Uses
 
@@ -65,5 +70,13 @@ const {files} = defineProps({
 // Computed
 
 //Methods
+function openFolder(file) {
+    console.log("the file --- ", file)
+    if(!file.is_folder) {
+        return;
+    }
+
+    router.visit(route('myFiles', {folder: file.path}))
+}
 
 </script>

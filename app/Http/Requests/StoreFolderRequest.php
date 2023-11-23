@@ -12,10 +12,10 @@ class StoreFolderRequest extends ParentIdBaseRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
-    {
-        return true;
-    }
+//    public function authorize(): bool
+//    {
+//        return true;
+//    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -29,8 +29,9 @@ class StoreFolderRequest extends ParentIdBaseRequest
                 'name' => [
                     'required',
                     Rule::unique(File::class, 'name')
-                    ->where('created_by', Auth::id())
-                    ->where('parent_id', $this->parent_id)
+                        ->where('created_by', Auth::id())
+                        ->where('parent_id', $this->parent_id)
+                        ->whereNull('deleted_at')
                 ]
             ]
         );

@@ -72,10 +72,16 @@ const {files} = defineProps({
 //Methods
 function openFolder(file) {
     console.log("the file --- ", file)
+    console.log("file.path} --- ", file.path)
     if(!file.is_folder) {
         return;
     }
 
+    /**
+     * Point of interest:
+     * This seems to be where you're passing the props, and I think file.path is
+     * the current folder open (could be null, or could be not)
+     */
     router.visit(route('myFiles', {folder: file.path}))
 }
 

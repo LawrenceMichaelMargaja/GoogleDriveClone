@@ -11,50 +11,71 @@ use Inertia\Inertia;
 
 class FileController extends Controller
 {
-    public function myFiles(string $folder = null) {
+    public function myFiles(string $folder = null)
+    {
+        try {
+            if ($folder) {
+                $folder = File::query()->where('created_by', Auth::id())
+                    ->where('path', $folder)
+                    ->firstOrFail();
+            }
 
-        if($folder) {
-            $folder = File::query()->where('created_by', Auth::id())
-                ->where('path', $folder)
-                ->firstOrFail();
+            if (!$folder) {
+                $folder = $this->getRoot();
+            }
+
+            $files = File::query()
+                ->where('parent_id', $folder->id)
+                ->where('created_by', Auth::id())
+                ->orderBy('is_folder', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+
+            $files = FileResource::collection($files);
+
+            return Inertia::render('MyFiles', compact('files', 'folder'));
+        } catch (\Exception $e) {
+            throw new \Exception("show files page: " . $e->getMessage());
         }
-
-        if(!$folder) {
-            $folder = $this->getRoot();
-        }
-
-        $files = File::query()
-            ->where('parent_id', $folder->id)
-            ->where('created_by', Auth::id())
-            ->orderBy('is_folder', 'desc')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-
-        $files = FileResource::collection($files);
-
-        return Inertia::render('MyFiles', compact('files'));
     }
 
-    public function createFolder(StoreFolderRequest $request) {
-        $data = $request->validated();
+    public function createFolder(StoreFolderRequest $request)
+    {
+        try {
+            $data = $request->validated();
+            $parent = $request->parent;
 
-//        dd("data --- ", $data);
+            if (!$parent) {
+                $parent = $this->getRoot();
+            }
 
-        $parent = $request->parent;
+            $file = new File();
+            $file->is_folder = 1;
+            $file->name = $data['name'];
 
-        if (!$parent) {
-            $parent = $this->getRoot();
+            $parent->appendNode($file);
+        } catch (\Exception $e) {
+            throw new \Exception("Error creating folder: " . $e->getMessage());
         }
-
-        $file = new File();
-//        dd($file);
-        $file->is_folder = 1;
-        $file->name = $data['name'];
-
-        $parent->appendNode($file);
     }
 
-    private function getRoot() {
-        return File::query()->whereIsRoot()->where('created_by', Auth::id())->firstOrFail();
+    /**
+     * Fetches the "root" file (meaning the one created during registration).
+     *
+     * This is actually brilliant, the use-case it solves is when there
+     * is no parent provided on the new folder to be created, it uses the "root"
+     * as the parent. Basically, the File will then be a "top-level" file, with
+     * only the root being a level higher.
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    private function getRoot()
+    {
+        try {
+            return File::query()->whereIsRoot()->where('created_by', Auth::id())->firstOrFail();
+        } catch (\Exception $e) {
+            throw new \Exception("Error fetching root folder: " . $e->getMessage());
+        }
     }
 }

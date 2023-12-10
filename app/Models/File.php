@@ -27,7 +27,7 @@ class File extends Model
     }
 
     public function isRoot() {
-        return $this->parent_id == null;
+        return $this->parent_id === null;
     }
 
     public function owner(): Attribute {

@@ -19,7 +19,7 @@ class ParentIdBaseRequest extends FormRequest
     public function authorize(): bool
     {
         $this->parent = File::query()->where('id', $this->input('parent_id'))->first();
-
+//        dd($this->parent);
         if ($this->parent && !$this->parent->isOwnedBy(Auth::id())) {
             return false;
         }

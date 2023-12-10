@@ -44,7 +44,7 @@ class FileController extends Controller
         try {
             $data = $request->validated();
             $parent = $request->parent;
-
+//            dd($parent);
             if (!$parent) {
                 $parent = $this->getRoot();
             }

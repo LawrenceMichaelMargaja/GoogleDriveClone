@@ -55,7 +55,8 @@ import {nextTick, ref} from "vue";
 
 // Uses
 const form = useForm({
-    name: ''
+    name: '',
+    parent_id: null,
 })
 
 // Refs
@@ -70,16 +71,15 @@ const {modelValue} = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue'])
+
 // Methods
 
-function onShow () {
+function onShow() {
     nextTick(() => folderNameInput.value.focus())
 }
 
-function createFolder () {
-    console.log("page.props === ", page.props);
-    form.parent_id = page.props.folder.id
-    console.log("the form --- ");
+function createFolder() {
+    form.parent_id = page.props.folder.id;
     form.post(route('folder.create'), {
         preserveScroll: true,
         onSuccess: () => {
@@ -92,7 +92,7 @@ function createFolder () {
     })
 }
 
-function closeModal () {
+function closeModal() {
     emit('update:modelValue')
     form.clearErrors();
     form.reset()

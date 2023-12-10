@@ -32,6 +32,8 @@ Route::controller(\App\Http\Controllers\FileController::class)
             ->where('folder', '(.*)')
             ->name('myFiles');
         Route::post('/folder/create', 'createFolder')->name('folder.create');
+        Route::get('/test/{folder?}', 'testReturn')->name('testReturn');
+        Route::post('/hehe', 'testReturn')->name('folder.created');
     }
 );
 

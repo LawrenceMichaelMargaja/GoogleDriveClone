@@ -1,5 +1,6 @@
 <template>
     <AuthenticatedLayout>
+        <pre>{{ancestors}}</pre>
         <table v-if="files.data.length" class="min-w-full">
             <thead class="bg-gray-100 border-b">
             <tr>
@@ -64,7 +65,9 @@ import {router} from "@inertiajs/vue3";
 
 // Props & Emit
 const {files} = defineProps({
-    files: Object
+    files: Object,
+    folder: Object,
+    ancestors: Array
 })
 
 // Computed

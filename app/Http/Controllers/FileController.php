@@ -33,7 +33,11 @@ class FileController extends Controller
 
             $files = FileResource::collection($files);
 
-            return Inertia::render('MyFiles', compact('files', 'folder'));
+            $ancestors = FileResource::collection([...$folder->ancestors, $folder]);
+
+            $folder = new FileResource($folder);
+
+            return Inertia::render('MyFiles', compact('files', 'folder', 'ancestors'));
         } catch (\Exception $e) {
             throw new \Exception("show files page: " . $e->getMessage());
         }

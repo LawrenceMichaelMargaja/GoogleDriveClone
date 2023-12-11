@@ -86,7 +86,8 @@ class FileController extends Controller
 
     public function store(StoreFileRequest $request) {
         $data = $request->validated();
+        $fileTree = $request->file_tree;
 
-        dd($data);
+        dd($data, $fileTree);
     }
 }

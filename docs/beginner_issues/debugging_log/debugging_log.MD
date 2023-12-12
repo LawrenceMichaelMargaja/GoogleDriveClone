@@ -24,3 +24,13 @@ Was Lawrence able to solve it himself? - Yes.
 Why was Lawrence able to solve it? - After chatting with Demby... I remembered that most of my problems stem from fear and anxiety and self-doubt. They bind my arms and legs and force me to look at a version of myself that is weak and stupid and incompetent. So what I decided to do was to break the bindings on my arms and legs and just taking it slow and understand each line all the while believing that I can do this.
 
 What should Lawrence do? - He's going to keep using this mindset moving forward. As well as practice the engineering thinking that Demby wants him to have.
+
+
+# 3 - Folder and File Tree Creation Bug
+Reason - To be determined.
+
+Details - When I upload a new folder containing files and sub-folders, the uploaded folder doesn't match the way the folder is mapped on the local machine. I may be wrong but I've figured out that the error is not on the vue end but on the laravel end because I've consulted chatGPT4 with the code for the frontend and everything seems to be ok. However, when I dd the filePaths at the store method in the File Controller, you can see what I mean when I say that there's a mismatch.
+
+Why was Lawrence not able to solve it? - Maybe you'd like to provide an answer for this gaw? and I can add some later
+
+What should Lawrence do? - Same goes for here maybe? or maybe I should give time for the algos on leetcode again. like 1hr leet code a day. What do you think?

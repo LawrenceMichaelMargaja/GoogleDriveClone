@@ -87,6 +87,8 @@ class StoreFileRequest extends ParentIdBaseRequest
 
     private function buildFileTree($filePaths, $files) {
 
+//        dd($filePaths);
+
         $filePaths = array_slice($filePaths, 0, count($files));
         $filePaths = array_filter($filePaths, fn($f) => $f != null);
 

@@ -69,18 +69,48 @@
     }
 
     function uploadFiles(files) {
-        console.log(files);
+        console.log(" the files --- ", files);
+
         fileUploadForm.parent_id = page.props.folder.id
         fileUploadForm.files = files
         fileUploadForm.relative_paths = [...files].map(f => f.webkitRelativePath);
 
-        fileUploadForm.post(route('file.store'))
-     }
+        fileUploadForm.post(route('file.store'), {
+            onSuccess: () => {
+                showSuccessNotification(`${files.length} files have been uploaded`)
+            },
+            onError: errors => {
+                let message = '';
+
+                if (Object.keys(errors).length > 0) {
+                    message = errors[Object.keys(errors)[0]]
+                } else {
+                    message = 'Error during file upload. Please try again later.'
+                }
+
+                showErrorDialog(message)
+            },
+            onFinish: () => {
+                fileUploadForm.clearErrors()
+                fileUploadForm.reset();
+            }
+        })
+    }
+
+    // function uploadFiles(files) {
+    //     console.log(files);
+    //     fileUploadForm.parent_id = page.props.folder.id
+    //     fileUploadForm.files = files
+    //     fileUploadForm.relative_paths = [...files].map(f => f.webkitRelativePath);
+    //
+    //     fileUploadForm.post(route('file.store'))
+    //  }
 
     // Hooks
     onMounted(() => {
         emitter.on(FILE_UPLOAD_STARTED, uploadFiles)
-    })
+        // console.log("uploadFiles === ", uploadFiles)
+    });
 </script>
 
 <style scoped>

@@ -51,6 +51,8 @@ class StoreFileRequest extends ParentIdBaseRequest
                 'string',
                 function ($attribute, $value, $fail) {
                     if($value) {
+                        // This returns the proper folder name. hurray... progression
+//                        dd($value);
                         /** @var $value \Illuminate\Http\UploadedFile */
                         $file = File::query()->where('name', $value)
                             ->where('created_by', Auth::id())
@@ -80,6 +82,11 @@ class StoreFileRequest extends ParentIdBaseRequest
     {
         $data = $this->validated();
 
+        // Dump here shows me that the file_paths are empty. You're getting closer. FAAN
+//        dd("this->file_paths", $this->file_paths);
+
+        dd($this);
+
         $this->replace([
             'file_tree' => $this->buildFileTree($this->file_paths, $data['files'])
         ]);
@@ -87,7 +94,13 @@ class StoreFileRequest extends ParentIdBaseRequest
 
     private function buildFileTree($filePaths, $files) {
 
-//        dd($filePaths);
+        // why is the buildTree Function not dumped when I make a folder?
+        // So... when I upload a folder... the dump does not work. However, when I upload a single file... the dump fires.
+        // Additional info... the filePaths is empty... this could be the reason why the tree isn't matching what I see on my local machine.
+//        dd("filePaths --- ", $filePaths);
+
+        // dumping of files work and there is also data.
+//        dd("the files --- ", $files);
 
         $filePaths = array_slice($filePaths, 0, count($files));
         $filePaths = array_filter($filePaths, fn($f) => $f != null);

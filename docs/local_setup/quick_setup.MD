@@ -13,5 +13,5 @@ How to start on your local machine
 2. execute **php artisan migrate:refresh --seed** in the _containerized environment_
 3. execute **composer install** in the _containerized environment_
 4. execute **npm install** in the _containerized environment_
-5. execute **npm run dev** in the _containerized environment or the regular terminal_
+ 5. execute **npm run dev** in the _containerized environment or the regular terminal_
 6. to login, goto APP_URL/login, and type your login credentials (the email is in your seeder and the password is in the UserFactory)

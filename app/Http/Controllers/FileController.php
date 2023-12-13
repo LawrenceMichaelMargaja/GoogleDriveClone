@@ -47,6 +47,10 @@ class FileController extends Controller
 
     public function createFolder(StoreFolderRequest $request)
     {
+
+        // This die dump is not working when I create a folder. I don't know why yet.
+//        dd($request);
+
         try {
             $data = $request->validated();
             $parent = $request->parent;

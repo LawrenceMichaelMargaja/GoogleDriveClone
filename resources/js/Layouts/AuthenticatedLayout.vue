@@ -16,12 +16,14 @@
                     <SearchForm/>
                     <UserSettingDropdown/>
                 </div>
+<!--                {{fileUploadForm.progress.percentage}}-->
                 <div class="flex-1 flex flex-col overflow-hidden">
                     <slot/>
                 </div>
             </template>
         </main>
     </div>
+    <FormProgress :form="fileUploadForm"/>
 </template>
 
 <script setup>
@@ -32,6 +34,7 @@
     import {handleError, onMounted, ref} from "vue";
     import {emitter, FILE_UPLOAD_STARTED} from "@/event-bus.js";
     import {useForm, usePage} from "@inertiajs/vue3";
+    import FormProgress from "@/Components/app/FormProgress.vue";
 
     // Uses
     const page = usePage();

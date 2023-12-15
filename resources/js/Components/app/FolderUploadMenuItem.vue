@@ -22,6 +22,7 @@ import {emitter, FILE_UPLOAD_STARTED} from "@/event-bus.js";
 
 // Methods
 function onChange(ev){
+    // console.log("the files --- ", ev.target.files);
     emitter.emit(FILE_UPLOAD_STARTED, ev.target.files)
 }
 

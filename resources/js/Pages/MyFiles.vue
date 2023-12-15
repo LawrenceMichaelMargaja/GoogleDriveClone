@@ -92,7 +92,7 @@ import {router} from "@inertiajs/vue3";
 const {files} = defineProps({
     files: Object,
     folder: Object,
-    ancestors: Array
+    ancestors: Object
 })
 
 // Computed

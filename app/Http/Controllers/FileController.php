@@ -84,6 +84,10 @@ class FileController extends Controller
     public function store(StoreFileRequest $request) {
 
         $data = $request->validated();
+
+//        dd($data);
+//        dd($request->parent);
+
         $parent = $request->parent;
         $user = $request->user();
         $fileTree = $request->file_tree;
@@ -91,7 +95,7 @@ class FileController extends Controller
         // this dd doesn't match what the folders look like in the local machine.
 //        dd($fileTree);
 
-        if($parent) {
+        if(!$parent) {
             $parent = $this->getRoot();
         }
 

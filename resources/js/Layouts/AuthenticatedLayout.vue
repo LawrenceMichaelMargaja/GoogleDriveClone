@@ -3,12 +3,12 @@
         <Navigation/>
 
         <main @drop.prevent="handleDrop"
-              @dragover="onDragOver"
+              @dragover.prevent="onDragOver"
               @dragleave.prevent="onDragLeave()"
               class="flex flex-col flex-1 px-4 overflow-hidden"
               :class="dragOver ? 'dropzone' : ''"
         >
-            <template v-if="dragOver" class="text-gray-400 text-center py-0 text-sm">
+            <template v-if="dragOver" class="text-gray-400 text-center py-8 text-sm">
                 Drop Files Here To Upload
             </template>
             <template v-else>
@@ -50,6 +50,7 @@
 
     // Methods
     function onDragOver () {
+        // console.log("the value --- ", dragOver);
         dragOver.value = true
     }
 
@@ -69,42 +70,13 @@
     }
 
     function uploadFiles(files) {
-        console.log(" the files --- ", files);
-
+        console.log(files);
         fileUploadForm.parent_id = page.props.folder.id
         fileUploadForm.files = files
         fileUploadForm.relative_paths = [...files].map(f => f.webkitRelativePath);
 
-        fileUploadForm.post(route('file.store'), {
-            onSuccess: () => {
-                showSuccessNotification(`${files.length} files have been uploaded`)
-            },
-            onError: errors => {
-                let message = '';
-
-                if (Object.keys(errors).length > 0) {
-                    message = errors[Object.keys(errors)[0]]
-                } else {
-                    message = 'Error during file upload. Please try again later.'
-                }
-
-                showErrorDialog(message)
-            },
-            onFinish: () => {
-                fileUploadForm.clearErrors()
-                fileUploadForm.reset();
-            }
-        })
-    }
-
-    // function uploadFiles(files) {
-    //     console.log(files);
-    //     fileUploadForm.parent_id = page.props.folder.id
-    //     fileUploadForm.files = files
-    //     fileUploadForm.relative_paths = [...files].map(f => f.webkitRelativePath);
-    //
-    //     fileUploadForm.post(route('file.store'))
-    //  }
+        fileUploadForm.post(route('file.store'))
+     }
 
     // Hooks
     onMounted(() => {

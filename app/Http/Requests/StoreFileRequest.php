@@ -51,7 +51,7 @@ class StoreFileRequest extends ParentIdBaseRequest
                 'string',
                 function ($attribute, $value, $fail) {
                     if($value) {
-                        // This returns the proper folder name. hurray... progression
+                        // This returns the proper folder name.
 //                        dd($value);
                         /** @var $value \Illuminate\Http\UploadedFile */
                         $file = File::query()->where('name', $value)
@@ -82,10 +82,10 @@ class StoreFileRequest extends ParentIdBaseRequest
     {
         $data = $this->validated();
 
-        // Dump here shows me that the file_paths are empty. You're getting closer. FAAN
+        // Dump here shows me that the file_paths are empty.
 //        dd("this->file_paths", $this->file_paths);
 
-        dd($this);
+//        dd($this);
 
         $this->replace([
             'file_tree' => $this->buildFileTree($this->file_paths, $data['files'])
@@ -105,15 +105,17 @@ class StoreFileRequest extends ParentIdBaseRequest
         $filePaths = array_slice($filePaths, 0, count($files));
         $filePaths = array_filter($filePaths, fn($f) => $f != null);
 
+//        dd($filePaths);
+
         $tree = [];
 
         foreach ($filePaths as $ind => $filePath) {
-
-            $currentNode = &$tree;
             $parts = explode('/', $filePath);
+            $currentNode = &$tree;
+
             foreach ($parts as $i => $part) {
                 if(!isset($currentNode[$part])) {
-                    $currentNode = [];
+                    $currentNode[$part] = [];
                 }
 
                 if($i == count($parts) - 1) {
@@ -123,7 +125,7 @@ class StoreFileRequest extends ParentIdBaseRequest
                 }
             }
         }
-
+//        dd($tree);
         return $tree;
     }
 }

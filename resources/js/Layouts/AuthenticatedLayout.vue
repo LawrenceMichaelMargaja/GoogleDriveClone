@@ -75,7 +75,10 @@
     }
 
     function uploadFiles(files) {
-        console.log(files);
+
+        console.log("fileUploadForm --- ", fileUploadForm.files);
+        console.log("the page --- ", page.props);
+
         fileUploadForm.parent_id = page.props.folder.id
         fileUploadForm.files = files
         fileUploadForm.relative_paths = [...files].map(f => f.webkitRelativePath);
@@ -104,6 +107,7 @@
 
     // Hooks
     onMounted(() => {
+        console.log("file_upload_started --- ", FILE_UPLOAD_STARTED);
         emitter.on(FILE_UPLOAD_STARTED, uploadFiles)
         // console.log("uploadFiles === ", uploadFiles)
     });

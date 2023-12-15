@@ -49,8 +49,9 @@
                 v-for="file of files.data" :key="file.id"
             >
                 <td
-                    class="px-6 py-4 whitespace-nowrap text-sm font-medium"
+                    class="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center"
                 >
+                    <FileIcon :file="file"/>
                     {{file.name}}
                 </td>
                 <td
@@ -83,6 +84,7 @@
 import {Link} from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {router} from "@inertiajs/vue3";
+import FileIcon from "@/Components/app/FileIcon.vue";
 
 // Uses
 

@@ -25,55 +25,59 @@
                 </li>
             </ol>
         </nav>
-        <table v-if="files.data.length" class="min-w-full">
-            <thead class="bg-gray-100 border-b">
-            <tr>
-                <th class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                    Name
-                </th>
-                <th class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                    Owner
-                </th>
-                <th class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                    Last Modified
-                </th>
-                <th class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                    Size
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr
-                @dblclick="openFolder(file)"
-                class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
-                v-for="file of files.data" :key="file.id"
-            >
-                <td
-                    class="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center"
+        <div class="flex-1 overflow-auto">
+            <table class="min-w-full">
+                <thead class="bg-gray-100 border-b">
+                <tr>
+                    <th class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                        Name
+                    </th>
+                    <th class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                        Owner
+                    </th>
+                    <th class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                        Last Modified
+                    </th>
+                    <th class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                        Size
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr
+                    @dblclick="openFolder(file)"
+                    class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100 cursor-pointer"
+                    v-for="file of files.data" :key="file.id"
                 >
-                    <FileIcon :file="file"/>
-                    {{file.name}}
-                </td>
-                <td
-                    class="px-6 py-4 whitespace-nowrap text-sm font-medium"
-                >
-                    {{file.owner}}
-                </td>
-                <td
-                    class="px-6 py-4 whitespace-nowrap text-sm font-medium"
-                >
-                    {{file.updated_at}}
-                </td>
-                <td
-                    class="px-6 py-4 whitespace-nowrap text-sm font-medium"
-                >
-                    {{file.size}}
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <div v-else class="py-8 text-center text-lg text-gray-400">
-            There is no data in this folder
+                    <!--                {{JSON.stringify(files.data)}}-->
+                    <td
+                        class="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center"
+                    >
+                        <FileIcon :file="file"/>
+                        {{file.name}}
+                    </td>
+                    <td
+                        class="px-6 py-4 whitespace-nowrap text-sm font-medium"
+                    >
+                        {{file.owner}}
+                    </td>
+                    <td
+                        class="px-6 py-4 whitespace-nowrap text-sm font-medium"
+                    >
+                        {{file.updated_at}}
+                    </td>
+                    <td
+                        class="px-6 py-4 whitespace-nowrap text-sm font-medium"
+                    >
+                        {{file.size}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div v-if="!files.data.length"  class="py-8 text-center text-lg text-gray-400">
+                There is no data in this folder
+            </div>
+            <div ref="loadMoreIntersect"></div>
         </div>
     </AuthenticatedLayout>
 </template>
@@ -85,10 +89,12 @@ import {Link} from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {router} from "@inertiajs/vue3";
 import FileIcon from "@/Components/app/FileIcon.vue";
+import {onMounted, ref} from "vue";
 
 // Uses
 
 // Refs
+const loadMoreIntersect = ref(null)
 
 // Props & Emit
 const {files} = defineProps({
@@ -97,12 +103,14 @@ const {files} = defineProps({
     ancestors: Object
 })
 
+// I have determined that the files I get here isn't the same as the number in the DB.
+console.log("the files 3 --- ", files);
 // Computed
 
 //Methods
 function openFolder(file) {
-    console.log("the file --- ", file)
-    console.log("file.path} --- ", file.path)
+    // console.log("the file --- ", file)
+    // console.log("file.path} --- ", file.path)
     if(!file.is_folder) {
         return;
     }
@@ -114,5 +122,18 @@ function openFolder(file) {
      */
     router.visit(route('myFiles', {folder: file.path}))
 }
+
+function loadMore() {
+    console.log("load more")
+}
+
+onMounted(() => {
+    // console.log('the files 4 --- ', files.data);
+    const observer = new IntersectionObserver((entries) => entries.forEach(entry => entry.isIntersecting && loadMore()), {
+        rootMargin: '-250px 0px 0px 0px'
+    })
+
+    observer.observe(loadMoreIntersect.value)
+});
 
 </script>

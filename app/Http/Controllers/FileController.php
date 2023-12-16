@@ -16,6 +16,8 @@ class FileController extends Controller
     public function myFiles(string $folder = null)
     {
         try {
+//            echo phpinfo();
+//            exit;
             if ($folder) {
                 $folder = File::query()->where('created_by', Auth::id())
                     ->where('path', $folder)
@@ -31,7 +33,7 @@ class FileController extends Controller
                 ->where('created_by', Auth::id())
                 ->orderBy('is_folder', 'desc')
                 ->orderBy('created_at', 'desc')
-                ->paginate(10);
+                ->paginate(20);
 
             $files = FileResource::collection($files);
 
@@ -85,6 +87,7 @@ class FileController extends Controller
 
         $data = $request->validated();
 
+        // This dd tells me that the backend is getting the right data at this point.
 //        dd($data);
 //        dd($request->parent);
 
@@ -104,6 +107,10 @@ class FileController extends Controller
         } else {
             foreach ($data['files'] as $file) {
                 /** @var UploadedFile $file */
+//                echo "fuck!";
+                var_dump("the file", $file);
+//                echo($file);
+//                echo($this->saveFile($file, $user, $parent));
                 $this->saveFile($file, $user, $parent);
             }
         }
@@ -118,8 +125,7 @@ class FileController extends Controller
         }
     }
 
-    public function saveFileTree($fileTree, $parent, $user)
-    {
+    public function saveFileTree($fileTree, $parent, $user) {
         foreach ($fileTree as $name => $file) {
             if (is_array($file)) {
                 $folder = new File();
@@ -135,14 +141,17 @@ class FileController extends Controller
         }
     }
 
+
+    public function destroy(Request $request) {
+        
+    }
     /**
      * @param $file
      * @param $user
      * @param $parent
      * @return void
      */
-    public function saveFile($file, $user, $parent): void
-    {
+    public function saveFile($file, $user, $parent): void {
         $path = $file->store('/files/' . $user->id);
 
         $model = new File();

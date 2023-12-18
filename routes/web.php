@@ -35,6 +35,8 @@ Route::controller(\App\Http\Controllers\FileController::class)
         Route::get('/test/{folder?}', 'testReturn')->name('testReturn');
         Route::post('/hehe', 'testReturn')->name('folder.created');
         Route::post('/file', 'store')->name('file.store');
+        Route::delete('/file', 'destroy')->name('file.delete');
+        Route::get('/file/download', 'download')->name('file.download');
     }
 );
 
